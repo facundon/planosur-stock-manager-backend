@@ -1,0 +1,52 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+    previewFeatures = ["interactiveTransactions"]
+  output          = "../node_modules/.prisma/client"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Product {
+   code String @unique @id
+   name String
+   qty Int @default(1)
+   unit Unit @default(kg)
+   provider Provider @relation(fields: [providerId], references: [id])
+   providerId Int
+   category Category @relation(fields: [categoryId], references: [id])
+   categoryId Int
+   price Decimal @db.Decimal(8, 2)
+   currentStock Int
+   minStock Int
+   maxStock Int
+   updatedAt DateTime @updatedAt
+   createdAt DateTime @default(now())
+}
+
+model Provider {
+   id Int @id
+   name String @unique
+   phone Int?
+   address String?
+   email String?
+   products Product[]
+}
+
+model Category {
+   id Int @id
+   name String @unique
+   products Product[]
+}
+
+enum Unit {
+   g
+   kg
+   lt
+   ml
+}
