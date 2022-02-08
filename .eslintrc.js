@@ -1,24 +1,40 @@
 module.exports = {
-  parser: '@typescript-eslint/parser',
-  parserOptions: {
-    project: 'tsconfig.json',
-    sourceType: 'module',
-  },
-  plugins: ['@typescript-eslint/eslint-plugin'],
-  extends: [
-    'plugin:@typescript-eslint/recommended',
-    'plugin:prettier/recommended',
-  ],
-  root: true,
-  env: {
-    node: true,
-    jest: true,
-  },
-  ignorePatterns: ['.eslintrc.js'],
-  rules: {
-    '@typescript-eslint/interface-name-prefix': 'off',
-    '@typescript-eslint/explicit-function-return-type': 'off',
-    '@typescript-eslint/explicit-module-boundary-types': 'off',
-    '@typescript-eslint/no-explicit-any': 'off',
-  },
-};
+   parser: "@typescript-eslint/parser",
+   parserOptions: {
+      project: "tsconfig.json",
+      sourceType: "module",
+   },
+   plugins: ["@typescript-eslint/eslint-plugin", "prettier"],
+   extends: [
+      "eslint:recommended",
+      "plugin:@typescript-eslint/recommended",
+      "plugin:prettier/recommended",
+   ],
+   root: true,
+   env: {
+      node: true,
+      jest: true,
+   },
+   ignorePatterns: [".eslintrc.js", "node_modules", "dist"],
+   rules: {
+      "prettier/prettier": 2,
+      "prefer-template": 2,
+      "no-useless-rename": 2,
+      "no-else-return": [2, { allowElseIf: false }],
+      "quote-props": [2, "as-needed"],
+      "class-methods-use-this": 1,
+      "prefer-destructuring": 0,
+      "react/no-unescaped-entities": 0,
+      "react/display-name": 0,
+      "no-use-before-define": 0,
+      "@typescript-eslint/no-use-before-define": 2,
+      "no-unused-vars": 0,
+      "@typescript-eslint/no-unused-vars": 1,
+      "no-shadow": 0,
+      "@typescript-eslint/no-shadow": 2,
+      "@typescript-eslint/no-useless-constructor": 2,
+      "@typescript-eslint/explicit-function-return-type": 0,
+      "@typescript-eslint/no-unsafe-return": 0,
+      "@typescript-eslint/member-ordering": 2,
+   },
+}
