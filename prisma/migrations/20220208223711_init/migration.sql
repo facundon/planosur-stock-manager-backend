@@ -7,6 +7,11 @@ CREATE TABLE `Product` (
     `providerId` INTEGER NOT NULL,
     `categoryId` INTEGER NOT NULL,
     `price` DECIMAL(8, 2) NOT NULL,
+    `currentStock` INTEGER NOT NULL,
+    `minStock` INTEGER NOT NULL,
+    `maxStock` INTEGER NOT NULL,
+    `updatedAt` DATETIME(3) NOT NULL,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
 
     UNIQUE INDEX `Product_code_key`(`code`),
     PRIMARY KEY (`code`)

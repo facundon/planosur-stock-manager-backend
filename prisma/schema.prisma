@@ -17,9 +17,9 @@ model Product {
    name String
    qty Int @default(1)
    unit Unit @default(kg)
-   provider Provider @relation(fields: [providerId], references: [id])
+   provider Provider? @relation(fields: [providerId], references: [id])
    providerId Int
-   category Category @relation(fields: [categoryId], references: [id])
+   category Category? @relation(fields: [categoryId], references: [id])
    categoryId Int
    price Decimal @db.Decimal(8, 2)
    currentStock Int
