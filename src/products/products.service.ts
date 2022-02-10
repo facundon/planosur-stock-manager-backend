@@ -14,7 +14,7 @@ export class ProductsService {
    findAll(
       where?: Prisma.ProductWhereInput,
       orderBy?: Prisma.ProductOrderByWithRelationInput,
-      limit = 50
+      limit?: number
    ): Promise<
       (Product & {
          provider: {
@@ -28,7 +28,7 @@ export class ProductsService {
       const products = this.prisma.product.findMany({
          where,
          orderBy,
-         take: limit,
+         take: limit || 50,
          include: { category: { select: { name: true } }, provider: { select: { name: true } } },
       })
       return products

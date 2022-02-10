@@ -33,7 +33,6 @@ export class ProductsController {
          filtersArray.push({
             OR: [{ name: { contains: searchVal } }, { code: { contains: searchVal } }],
          })
-
       return this.productService.findAll({ AND: filtersArray }, { code: "asc" }, +limit)
    }
 

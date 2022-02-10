@@ -1,0 +1,6 @@
+PATCH http://localhost:3001/products/0005 HTTP/1.1
+content-type: application/json
+
+{
+   "providerId": 1
+}
