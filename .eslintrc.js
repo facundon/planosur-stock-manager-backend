@@ -22,7 +22,7 @@ module.exports = {
       "no-useless-rename": 2,
       "no-else-return": [2, { allowElseIf: false }],
       "quote-props": [2, "as-needed"],
-      "class-methods-use-this": 1,
+      "class-methods-use-this": 0,
       "prefer-destructuring": 0,
       "react/no-unescaped-entities": 0,
       "react/display-name": 0,
