@@ -44,6 +44,15 @@ model Category {
    products Product[]
 }
 
+model Config {
+   key ConfigKeys @unique @id
+   value String
+}
+
+enum ConfigKeys {
+   password
+}
+
 enum Unit {
    g
    kg

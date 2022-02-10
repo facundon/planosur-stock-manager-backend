@@ -8,9 +8,17 @@ import { CategoriesModule } from "./categories/categories.module"
 import { AuthModule } from "./auth/auth.module"
 import { APP_GUARD } from "@nestjs/core"
 import { JwtAuthGuard } from "src/auth/jwt-auth-guard"
+import { PasswordModule } from "./password/password.module"
 
 @Module({
-   imports: [ProductsModule, PrismaModule, ProviderModule, CategoriesModule, AuthModule],
+   imports: [
+      ProductsModule,
+      PrismaModule,
+      ProviderModule,
+      CategoriesModule,
+      AuthModule,
+      PasswordModule,
+   ],
    controllers: [AppController],
    providers: [
       AppService,
