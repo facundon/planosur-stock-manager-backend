@@ -1,3 +1,4 @@
 
 GET http://localhost:3001/products?provider=1 HTTP/1.1
 content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6dHJ1ZSwic3ViIjoxLCJpYXQiOjE2NDQ1MjEwNjMsImV4cCI6MTY0NDUyMTEyM30.su3MMtXYANgSTkl4Qsv_8NEMTvn9dZD-nKuXG_RJTbY
