@@ -6,8 +6,7 @@ export class AuthService {
    constructor(private jwtService: JwtService) {}
 
    async validateUser(user: string, pass: string): Promise<true | null> {
-      console.log(user, pass)
-      const password = "123"
+      const password = process.env.DASHBOARD_PW
       if (password === pass) {
          return true
       }

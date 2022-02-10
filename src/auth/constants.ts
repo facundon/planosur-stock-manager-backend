@@ -1,3 +1,5 @@
+if (!process.env.SECRET) throw Error("Must declare SECRET env")
+
 export const jwtConstants = {
-   secret: "secretKey",
+   secret: process.env.SECRET,
 }

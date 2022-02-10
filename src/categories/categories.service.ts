@@ -26,13 +26,7 @@ export class CategoriesService {
    }
 
    async remove(id: number): Promise<Category> {
-      const [deletedCategory] = await this.prisma.$transaction([
-         this.prisma.category.update({
-            where: { id },
-            data: { products: { set: [] } },
-         }),
-         this.prisma.category.delete({ where: { id } }),
-      ])
+      const deletedCategory = this.prisma.category.delete({ where: { id } })
       return deletedCategory
    }
 }
