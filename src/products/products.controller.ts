@@ -20,7 +20,7 @@ export class ProductsController {
       @Query("search") searchVal?: string,
       @Query("stock_max") stockMax?: string,
       @Query("stock_min") stockMin?: string,
-      @Query("limit") limit = 50
+      @Query("limit") limit?: string
    ): Promise<Product[]> {
       const filtersArray: Prisma.Enumerable<Prisma.ProductWhereInput> = []
       categoryId && filtersArray.push({ categoryId: { equals: +categoryId } })
@@ -34,7 +34,7 @@ export class ProductsController {
             OR: [{ name: { contains: searchVal } }, { code: { contains: searchVal } }],
          })
 
-      return this.productService.findAll(limit, { AND: filtersArray }, { code: "asc" })
+      return this.productService.findAll({ AND: filtersArray }, { code: "asc" }, +limit)
    }
 
    @Get(":code")
@@ -43,7 +43,10 @@ export class ProductsController {
    }
 
    @Patch(":code")
-   update(@Param("code") code: string, @Body() updatedProduct: Product): Promise<Product> {
+   update(
+      @Param("code") code: string,
+      @Body() updatedProduct: Prisma.ProductUpdateInput
+   ): Promise<Product> {
       return this.productService.update({ code }, updatedProduct)
    }
 

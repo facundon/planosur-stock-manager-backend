@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from "@nestjs/common"
+import { Injectable } from "@nestjs/common"
 import { Prisma, Product } from "@prisma/client"
 import { PrismaService } from "src/prisma/prisma.service"
 
@@ -12,17 +12,42 @@ export class ProductsService {
    }
 
    findAll(
-      limit: number,
       where?: Prisma.ProductWhereInput,
-      orderBy?: Prisma.ProductOrderByWithRelationInput
-   ): Promise<Product[]> {
-      const products = this.prisma.product.findMany({ where, orderBy, take: limit })
+      orderBy?: Prisma.ProductOrderByWithRelationInput,
+      limit = 50
+   ): Promise<
+      (Product & {
+         provider: {
+            name: string
+         }
+         category: {
+            name: string
+         }
+      })[]
+   > {
+      const products = this.prisma.product.findMany({
+         where,
+         orderBy,
+         take: limit,
+         include: { category: { select: { name: true } }, provider: { select: { name: true } } },
+      })
       return products
    }
 
-   findOne(uniqueInput: Prisma.ProductWhereUniqueInput): Promise<Product> {
-      const product = this.prisma.product.findUnique({ where: uniqueInput })
-      if (!product) throw new HttpException("Product cannot be found", HttpStatus.NO_CONTENT)
+   findOne(uniqueInput: Prisma.ProductWhereUniqueInput): Promise<
+      Product & {
+         provider: {
+            name: string
+         }
+         category: {
+            name: string
+         }
+      }
+   > {
+      const product = this.prisma.product.findUnique({
+         where: uniqueInput,
+         include: { category: { select: { name: true } }, provider: { select: { name: true } } },
+      })
       return product
    }
 
