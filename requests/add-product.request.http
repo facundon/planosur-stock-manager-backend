@@ -2,10 +2,10 @@ POST http://localhost:3001/products HTTP/1.1
 content-type: application/json
 
 {
-   "name": "Producto 6",
-   "code": "0006",
-   "price": 50,
+   "name": "Producto 5",
+   "code": "0005",
+   "price": 650,
    "currentStock": 12,
-   "minStock": 1,
-   "maxStock": 50
+   "minStock": 3,
+   "maxStock": 20
 }

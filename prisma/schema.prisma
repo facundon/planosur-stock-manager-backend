@@ -3,7 +3,7 @@
 
 generator client {
   provider = "prisma-client-js"
-    previewFeatures = ["interactiveTransactions"]
+  previewFeatures = ["interactiveTransactions"]
   output          = "../node_modules/.prisma/client"
 }
 
@@ -30,7 +30,7 @@ model Product {
 }
 
 model Provider {
-   id Int @id
+   id Int @id @default(autoincrement())
    name String @unique
    phone Int?
    address String?
@@ -39,7 +39,7 @@ model Provider {
 }
 
 model Category {
-   id Int @id
+   id Int @id @default(autoincrement())
    name String @unique
    products Product[]
 }
