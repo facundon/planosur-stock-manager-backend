@@ -1,5 +1,5 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from "@nestjs/common"
-import { Product } from "@prisma/client"
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from "@nestjs/common"
+import { Prisma, Product } from "@prisma/client"
 import { ProductsService } from "./products.service"
 
 @Controller("products")
@@ -12,8 +12,29 @@ export class ProductsController {
    }
 
    @Get()
-   findAll(): Promise<Product[]> {
-      return this.productService.findAll()
+   findAll(
+      @Query("provider") providerId?: string,
+      @Query("category") categoryId?: string,
+      @Query("price_max") priceMax?: string,
+      @Query("price_min") priceMin?: string,
+      @Query("search") searchVal?: string,
+      @Query("stock_max") stockMax?: string,
+      @Query("stock_min") stockMin?: string,
+      @Query("limit") limit = 50
+   ): Promise<Product[]> {
+      const filtersArray: Prisma.Enumerable<Prisma.ProductWhereInput> = []
+      categoryId && filtersArray.push({ categoryId: { equals: +categoryId } })
+      providerId && filtersArray.push({ providerId: { equals: +providerId } })
+      priceMax && filtersArray.push({ price: { lte: parseFloat(priceMax) } })
+      priceMin && filtersArray.push({ price: { gte: parseFloat(priceMin) } })
+      stockMax && filtersArray.push({ currentStock: { lte: +stockMax } })
+      stockMin && filtersArray.push({ currentStock: { gte: +stockMin } })
+      searchVal &&
+         filtersArray.push({
+            OR: [{ name: { contains: searchVal } }, { code: { contains: searchVal } }],
+         })
+
+      return this.productService.findAll(limit, { AND: filtersArray }, { code: "asc" })
    }
 
    @Get(":code")

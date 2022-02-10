@@ -12,10 +12,11 @@ export class ProductsService {
    }
 
    findAll(
+      limit: number,
       where?: Prisma.ProductWhereInput,
       orderBy?: Prisma.ProductOrderByWithRelationInput
    ): Promise<Product[]> {
-      const products = this.prisma.product.findMany({ where, orderBy })
+      const products = this.prisma.product.findMany({ where, orderBy, take: limit })
       return products
    }
 
