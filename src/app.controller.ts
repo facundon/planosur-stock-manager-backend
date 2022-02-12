@@ -1,8 +1,8 @@
-import { Controller, Post, UseGuards, Request } from "@nestjs/common"
+import { Controller, Post, UseGuards, Request, Get } from "@nestjs/common"
 import { Request as ExpressRequest } from "express"
 import { AuthService } from "src/auth/auth.service"
 import { LocalAuthGuard } from "src/auth/local-auth-guard"
-import { WithoutAuth } from "src/without-auth.decorator"
+import { WithoutAuth } from "src/auth/without-auth.decorator"
 
 @Controller()
 export class AppController {
@@ -13,5 +13,10 @@ export class AppController {
    @Post("auth/login")
    async login(@Request() req: ExpressRequest) {
       return this.authService.login(req.user as true)
+   }
+
+   @Get("auth/isAuth")
+   isAuth() {
+      return true
    }
 }

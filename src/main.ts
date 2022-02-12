@@ -1,8 +1,8 @@
 import helmet from "helmet"
 import { HttpAdapterHost, NestFactory } from "@nestjs/core"
 import { NestExpressApplication } from "@nestjs/platform-express"
-import { PrismaClientExceptionFilter } from "src/prisma-client-exception.filter"
-import { PrismaQueryInterceptorInterceptor } from "src/prisma-query-interceptor.interceptor"
+import { PrismaClientExceptionFilter } from "src/db/prisma-client-exception.filter"
+import { PrismaQueryInterceptorInterceptor } from "src/db/prisma-query-interceptor.interceptor"
 import { AppModule } from "./app.module"
 
 async function bootstrap() {
