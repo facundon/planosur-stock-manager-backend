@@ -2,7 +2,7 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["interactiveTransactions"]
   output          = "../node_modules/.prisma/client"
 }
@@ -13,49 +13,49 @@ datasource db {
 }
 
 model Product {
-   code String @unique @id
-   name String
-   qty Int @default(1)
-   unit Unit @default(kg)
-   provider Provider? @relation(fields: [providerId], references: [id], onDelete: Cascade)
-   providerId Int?
-   category Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
-   categoryId Int?
-   price Decimal @db.Decimal(8, 2)
-   currentStock Int
-   minStock Int
-   maxStock Int
-   updatedAt DateTime @updatedAt
-   createdAt DateTime @default(now())
+  code         String    @id @unique
+  name         String
+  qty          Int       @default(1)
+  unit         Unit      @default(kg)
+  provider     Provider? @relation(fields: [providerId], references: [id], onDelete: Cascade)
+  providerId   Int?
+  category     Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  categoryId   Int?
+  price        Decimal   @db.Decimal(8, 2)
+  currentStock Int
+  minStock     Int       @default(0)
+  maxStock     Int
+  updatedAt    DateTime  @updatedAt
+  createdAt    DateTime  @default(now())
 }
 
 model Provider {
-   id Int @id @default(autoincrement())
-   name String @unique
-   phone Int?
-   address String?
-   email String?
-   products Product[]
+  id       Int       @id @default(autoincrement())
+  name     String    @unique
+  phone    Int?
+  address  String?
+  email    String?
+  products Product[]
 }
 
 model Category {
-   id Int @id @default(autoincrement())
-   name String @unique
-   products Product[]
+  id       Int       @id @default(autoincrement())
+  name     String    @unique
+  products Product[]
 }
 
 model Config {
-   key ConfigKeys @unique @id
-   value String
+  key   ConfigKeys @id @unique
+  value String
 }
 
 enum ConfigKeys {
-   password
+  password
 }
 
 enum Unit {
-   g
-   kg
-   lt
-   ml
+  g
+  kg
+  lt
+  ml
 }
