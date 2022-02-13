@@ -1,5 +1,7 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from "@nestjs/common"
-import { Prisma, Provider } from "@prisma/client"
+import { Controller, Get, Post, Body, Patch, Param, Delete, ValidationPipe } from "@nestjs/common"
+import { Provider } from "@prisma/client"
+import { CreateProviderDto } from "src/providers/dto/create-provider.dto"
+import { UpdateProviderDto } from "src/providers/dto/update-provider.dto"
 import { ProvidersService } from "./providers.service"
 
 @Controller("providers")
@@ -7,7 +9,9 @@ export class ProvidersController {
    constructor(private readonly providerService: ProvidersService) {}
 
    @Post()
-   create(@Body() createProviderDto: Prisma.ProviderCreateInput): Promise<Provider> {
+   create(
+      @Body(new ValidationPipe({ transform: true })) createProviderDto: CreateProviderDto
+   ): Promise<Provider> {
       return this.providerService.create(createProviderDto)
    }
 
@@ -24,7 +28,7 @@ export class ProvidersController {
    @Patch(":id")
    update(
       @Param("id") id: string,
-      @Body() updateProviderDto: Prisma.ProviderUpdateInput
+      @Body(new ValidationPipe({ transform: true })) updateProviderDto: UpdateProviderDto
    ): Promise<Provider> {
       return this.providerService.update(+id, updateProviderDto)
    }

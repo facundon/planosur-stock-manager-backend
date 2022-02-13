@@ -1,5 +1,7 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from "@nestjs/common"
-import { Category, Prisma } from "@prisma/client"
+import { Controller, Get, Post, Body, Patch, Param, Delete, ValidationPipe } from "@nestjs/common"
+import { Category } from "@prisma/client"
+import { CreateCategoryDto } from "src/categories/dto/create-category.dto"
+import { UpdateCategoryDto } from "src/categories/dto/update-category.dto"
 import { CategoriesService } from "./categories.service"
 
 @Controller("categories")
@@ -7,7 +9,9 @@ export class CategoriesController {
    constructor(private readonly categoriesService: CategoriesService) {}
 
    @Post()
-   create(@Body() createCategoryDto: Prisma.CategoryCreateInput): Promise<Category> {
+   create(
+      @Body(new ValidationPipe({ transform: true })) createCategoryDto: CreateCategoryDto
+   ): Promise<Category> {
       return this.categoriesService.create(createCategoryDto)
    }
 
@@ -24,7 +28,7 @@ export class CategoriesController {
    @Patch(":id")
    update(
       @Param("id") id: string,
-      @Body() updateCategoryDto: Prisma.CategoryUpdateInput
+      @Body(new ValidationPipe({ transform: true })) updateCategoryDto: UpdateCategoryDto
    ): Promise<Category> {
       return this.categoriesService.update(+id, updateCategoryDto)
    }

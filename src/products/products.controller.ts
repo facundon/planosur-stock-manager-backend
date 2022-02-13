@@ -1,5 +1,17 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from "@nestjs/common"
+import {
+   Controller,
+   Get,
+   Post,
+   Body,
+   Patch,
+   Param,
+   Delete,
+   Query,
+   ValidationPipe,
+} from "@nestjs/common"
 import { Prisma, Product } from "@prisma/client"
+import { CreateProductDto } from "src/products/dto/create-product.dto"
+import { UpdateProductDto } from "src/products/dto/update-product.dto"
 import { ProductsService } from "./products.service"
 
 @Controller("products")
@@ -7,7 +19,9 @@ export class ProductsController {
    constructor(private readonly productService: ProductsService) {}
 
    @Post()
-   create(@Body() newProduct: Product): Promise<Product> {
+   create(
+      @Body(new ValidationPipe({ transform: true })) newProduct: CreateProductDto
+   ): Promise<Product> {
       return this.productService.create(newProduct)
    }
 
@@ -44,7 +58,7 @@ export class ProductsController {
    @Patch(":code")
    update(
       @Param("code") code: string,
-      @Body() updatedProduct: Prisma.ProductUpdateInput
+      @Body(new ValidationPipe({ transform: true })) updatedProduct: UpdateProductDto
    ): Promise<Product> {
       return this.productService.update({ code }, updatedProduct)
    }
