@@ -1,17 +1,18 @@
 import { Prisma } from "@prisma/client"
 import { Transform } from "class-transformer"
-import { IsEmail, IsNotEmpty } from "class-validator"
-
+import { IsNotEmpty, IsOptional } from "class-validator"
 export class CreateProviderDto implements Prisma.ProviderCreateInput {
    @IsNotEmpty()
    name: string
 
-   @Transform(({ value }) => parseInt(value))
+   @IsOptional()
+   @Transform(({ value }) => parseInt(value) || null)
    phone?: number
 
-   @IsEmail()
+   @IsOptional()
    email?: string
 
+   @IsOptional()
    address?: string
 
    products?: Prisma.ProductCreateNestedManyWithoutProviderInput

@@ -10,7 +10,8 @@ export class ProvidersController {
 
    @Post()
    create(
-      @Body(new ValidationPipe({ transform: true })) createProviderDto: CreateProviderDto
+      @Body(new ValidationPipe({ transform: true }))
+      createProviderDto: CreateProviderDto
    ): Promise<Provider> {
       return this.providerService.create(createProviderDto)
    }

@@ -1,7 +1,7 @@
 import { Decimal } from ".prisma/client/runtime"
 import { Prisma, Unit } from "@prisma/client"
 import { Transform } from "class-transformer"
-import { IsDecimal, IsNotEmpty, IsNumber } from "class-validator"
+import { IsDecimal, IsNotEmpty, IsNumber, IsOptional } from "class-validator"
 
 export class CreateProductDto implements Prisma.ProductCreateInput {
    @Transform(({ value }) => parseInt(value))
@@ -9,10 +9,12 @@ export class CreateProductDto implements Prisma.ProductCreateInput {
    @IsNotEmpty()
    qty: number
 
+   @IsOptional()
    @Transform(({ value }) => parseInt(value))
    @IsNumber()
    providerId: number
 
+   @IsOptional()
    @IsNumber()
    @Transform(({ value }) => parseInt(value))
    categoryId: number
