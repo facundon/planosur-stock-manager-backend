@@ -1,37 +1,53 @@
 import { Decimal } from ".prisma/client/runtime"
 import { Prisma, Unit } from "@prisma/client"
 import { Transform } from "class-transformer"
-import { IsDecimal, IsNotEmpty, IsNumber, IsOptional } from "class-validator"
+import { IsDecimal, IsDefined, IsNotEmpty, IsNumber, IsOptional } from "class-validator"
 
 export class CreateProductDto implements Prisma.ProductCreateInput {
    @Transform(({ value }) => parseInt(value))
    @IsNumber()
-   @IsNotEmpty()
+   @IsDefined()
    qty: number
 
    @IsOptional()
-   @Transform(({ value }) => parseInt(value))
+   @Transform(({ value }) => (value === "" ? null : parseInt(value)))
    @IsNumber()
    providerId: number
 
    @IsOptional()
    @IsNumber()
-   @Transform(({ value }) => parseInt(value))
+   @Transform(({ value }) => (value === "" ? null : parseInt(value)))
    categoryId: number
 
    @Transform(({ value }) => parseInt(value))
    @IsNumber()
-   @IsNotEmpty()
-   currentStock: number
+   @IsDefined()
+   blankStock: number
 
    @Transform(({ value }) => parseInt(value))
    @IsNumber()
-   minStock = 0
+   @IsDefined()
+   blankMinStock = 0
 
    @Transform(({ value }) => parseInt(value))
    @IsNumber()
-   @IsNotEmpty()
-   maxStock: number
+   @IsDefined()
+   blankMaxStock: number
+
+   @Transform(({ value }) => parseInt(value))
+   @IsNumber()
+   @IsDefined()
+   unregisteredStock: number
+
+   @Transform(({ value }) => parseInt(value))
+   @IsNumber()
+   @IsDefined()
+   unregisteredMinStock = 0
+
+   @Transform(({ value }) => parseInt(value))
+   @IsNumber()
+   @IsDefined()
+   unregisteredMaxStock: number
 
    @IsNotEmpty()
    code: string

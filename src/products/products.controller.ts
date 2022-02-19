@@ -26,32 +26,45 @@ export class ProductsController {
    }
 
    @Get()
-   findAll(
-      @Query("provider") providerId?: string,
-      @Query("category") categoryId?: string,
-      @Query("price_max") priceMax?: string,
-      @Query("price_min") priceMin?: string,
-      @Query("search") searchVal?: string,
-      @Query("stock_max") stockMax?: string,
-      @Query("stock_min") stockMin?: string,
+   async findAll(
+      @Query("providerId") providerId?: string,
+      @Query("categoryId") categoryId?: string,
+      @Query("priceMax") priceMax?: string,
+      @Query("priceMin") priceMin?: string,
+      @Query("searchVal") searchVal?: string,
+      @Query("unregisteredStockMax") unregisteredStockMax?: string,
+      @Query("unregisteredStockMin") unregisteredStockMin?: string,
+      @Query("blankStockMax") blankStockMax?: string,
+      @Query("blankStockMin") blankStockMin?: string,
       @Query("limit") limit?: string
-   ): Promise<Product[]> {
+   ): Promise<(Product & { category: { name: string }; provider: { name: string } })[]> {
       const filtersArray: Prisma.Enumerable<Prisma.ProductWhereInput> = []
       categoryId && filtersArray.push({ categoryId: { equals: +categoryId } })
       providerId && filtersArray.push({ providerId: { equals: +providerId } })
       priceMax && filtersArray.push({ price: { lte: parseFloat(priceMax) } })
       priceMin && filtersArray.push({ price: { gte: parseFloat(priceMin) } })
-      stockMax && filtersArray.push({ currentStock: { lte: +stockMax } })
-      stockMin && filtersArray.push({ currentStock: { gte: +stockMin } })
+      blankStockMax && filtersArray.push({ blankStock: { lte: +blankStockMax } })
+      blankStockMin && filtersArray.push({ blankStock: { gte: +blankStockMin } })
+      unregisteredStockMax &&
+         filtersArray.push({ unregisteredStock: { lte: +unregisteredStockMax } })
+      unregisteredStockMin &&
+         filtersArray.push({ unregisteredStock: { gte: +unregisteredStockMin } })
       searchVal &&
          filtersArray.push({
             OR: [{ name: { contains: searchVal } }, { code: { contains: searchVal } }],
          })
-      return this.productService.findAll({ AND: filtersArray }, { code: "asc" }, +limit)
+      const products = await this.productService.findAll(
+         { AND: filtersArray },
+         { code: "asc" },
+         +limit
+      )
+      return products
    }
 
    @Get(":code")
-   findOne(@Param("code") code: string): Promise<Product> {
+   findOne(
+      @Param("code") code: string
+   ): Promise<Product & { category: { name: string }; provider: { name: string } }> {
       return this.productService.findOne({ code })
    }
 
