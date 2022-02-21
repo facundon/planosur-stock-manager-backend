@@ -4,6 +4,7 @@ import { NestExpressApplication } from "@nestjs/platform-express"
 import { PrismaClientExceptionFilter } from "src/db/prisma-client-exception.filter"
 import { PrismaQueryInterceptorInterceptor } from "src/db/prisma-query-interceptor.interceptor"
 import { AppModule } from "./app.module"
+import { ValidationPipe } from "@nestjs/common"
 
 async function bootstrap() {
    const app = await NestFactory.create<NestExpressApplication>(AppModule)
@@ -15,6 +16,8 @@ async function bootstrap() {
    app.useGlobalFilters(new PrismaClientExceptionFilter(httpAdapter))
 
    app.useGlobalInterceptors(new PrismaQueryInterceptorInterceptor())
+
+   app.useGlobalPipes(new ValidationPipe({ transform: true }))
 
    await app.listen(3001)
 }

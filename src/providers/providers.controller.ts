@@ -10,7 +10,7 @@ export class ProvidersController {
 
    @Post()
    create(
-      @Body(new ValidationPipe({ transform: true }))
+      @Body()
       createProviderDto: CreateProviderDto
    ): Promise<Provider> {
       return this.providerService.create(createProviderDto)
@@ -29,7 +29,7 @@ export class ProvidersController {
    @Patch(":id")
    update(
       @Param("id") id: string,
-      @Body(new ValidationPipe({ transform: true })) updateProviderDto: UpdateProviderDto
+      @Body() updateProviderDto: UpdateProviderDto
    ): Promise<Provider> {
       return this.providerService.update(+id, updateProviderDto)
    }

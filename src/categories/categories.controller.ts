@@ -9,9 +9,7 @@ export class CategoriesController {
    constructor(private readonly categoriesService: CategoriesService) {}
 
    @Post()
-   create(
-      @Body(new ValidationPipe({ transform: true })) createCategoryDto: CreateCategoryDto
-   ): Promise<Category> {
+   create(@Body() createCategoryDto: CreateCategoryDto): Promise<Category> {
       return this.categoriesService.create(createCategoryDto)
    }
 
@@ -28,7 +26,7 @@ export class CategoriesController {
    @Patch(":id")
    update(
       @Param("id") id: string,
-      @Body(new ValidationPipe({ transform: true })) updateCategoryDto: UpdateCategoryDto
+      @Body() updateCategoryDto: UpdateCategoryDto
    ): Promise<Category> {
       return this.categoriesService.update(+id, updateCategoryDto)
    }

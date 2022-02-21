@@ -6,35 +6,61 @@ import { PrismaService } from "src/prisma/prisma.service"
 export class ProductsService {
    constructor(private prisma: PrismaService) {}
 
-   create(newProduct: Prisma.ProductCreateInput): Promise<Product> {
-      const createdProduct = this.prisma.product.create({ data: newProduct })
-      return createdProduct
-   }
-
-   findAll(
-      where?: Prisma.ProductWhereInput,
-      orderBy?: Prisma.ProductOrderByWithRelationInput,
-      limit?: number
-   ): Promise<
-      (Product & {
+   async create(newProduct: Prisma.ProductCreateInput): Promise<
+      Product & {
          provider: {
             name: string
          }
          category: {
             name: string
          }
-      })[]
+      }
    > {
+      const createdProduct = this.prisma.product.create({
+         data: newProduct,
+         include: { category: { select: { name: true } }, provider: { select: { name: true } } },
+      })
+      return createdProduct
+   }
+
+   async findAll(
+      where?: Prisma.ProductWhereInput,
+      orderBy?: Prisma.ProductOrderByWithRelationInput,
+      limit?: number,
+      simple?: boolean
+   ): Promise<
+      | (Product & {
+           provider: {
+              name: string
+           }
+           category: {
+              name: string
+           }
+        })
+      | { name: string; code: string }[]
+   > {
+      if (simple) {
+         const products = this.prisma.product.findMany({
+            where,
+            orderBy,
+            select: { name: true, code: true },
+         })
+         return products
+      }
+
       const products = this.prisma.product.findMany({
          where,
          orderBy,
          take: limit || 50,
-         include: { category: { select: { name: true } }, provider: { select: { name: true } } },
+         include: {
+            category: { select: { name: true } },
+            provider: { select: { name: true } },
+         },
       })
       return products
    }
 
-   findOne(uniqueInput: Prisma.ProductWhereUniqueInput): Promise<
+   async findOne(uniqueInput: Prisma.ProductWhereUniqueInput): Promise<
       Product & {
          provider: {
             name: string
@@ -51,19 +77,41 @@ export class ProductsService {
       return product
    }
 
-   update(
+   async update(
       uniqueInput: Prisma.ProductWhereUniqueInput,
       updatedProduct: Prisma.ProductUpdateInput
-   ): Promise<Product> {
+   ): Promise<
+      Product & {
+         provider: {
+            name: string
+         }
+         category: {
+            name: string
+         }
+      }
+   > {
       const newProduct = this.prisma.product.update({
          where: uniqueInput,
          data: updatedProduct,
+         include: { category: { select: { name: true } }, provider: { select: { name: true } } },
       })
       return newProduct
    }
 
-   remove(uniqueInput: Prisma.ProductWhereUniqueInput): Promise<Product> {
-      const removedProduct = this.prisma.product.delete({ where: uniqueInput })
+   async remove(uniqueInput: Prisma.ProductWhereUniqueInput): Promise<
+      Product & {
+         provider: {
+            name: string
+         }
+         category: {
+            name: string
+         }
+      }
+   > {
+      const removedProduct = this.prisma.product.delete({
+         where: uniqueInput,
+         include: { category: { select: { name: true } }, provider: { select: { name: true } } },
+      })
       return removedProduct
    }
 }

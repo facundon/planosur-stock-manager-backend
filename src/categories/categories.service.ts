@@ -6,22 +6,22 @@ import { PrismaService } from "src/prisma/prisma.service"
 export class CategoriesService {
    constructor(private prisma: PrismaService) {}
 
-   create(createCategoryDto: Prisma.CategoryCreateInput): Promise<Category> {
+   async create(createCategoryDto: Prisma.CategoryCreateInput): Promise<Category> {
       return this.prisma.category.create({ data: createCategoryDto })
    }
 
-   findAll(
+   async findAll(
       where?: Prisma.CategoryWhereInput,
       orderBy?: Prisma.CategoryOrderByWithRelationInput
    ): Promise<Category[]> {
       return this.prisma.category.findMany({ where, orderBy })
    }
 
-   findOne(id: number): Promise<Category> {
+   async findOne(id: number): Promise<Category> {
       return this.prisma.category.findUnique({ where: { id } })
    }
 
-   update(id: number, updateCategoryDto: Prisma.CategoryUpdateInput): Promise<Category> {
+   async update(id: number, updateCategoryDto: Prisma.CategoryUpdateInput): Promise<Category> {
       return this.prisma.category.update({ where: { id }, data: updateCategoryDto })
    }
 
