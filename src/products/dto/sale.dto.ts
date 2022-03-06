@@ -13,7 +13,7 @@ export class SaleProduct {
    @Transform(({ value }) => parseInt(value))
    @IsNumber()
    @IsDefined()
-   qty: number
+   amount: number
 
    @IsEnum(StockType)
    type: StockType
