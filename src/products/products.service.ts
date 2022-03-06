@@ -26,28 +26,8 @@ export class ProductsService {
    async findAll(
       where?: Prisma.ProductWhereInput,
       orderBy?: Prisma.ProductOrderByWithRelationInput,
-      limit?: number,
-      simple?: boolean
-   ): Promise<
-      | (Product & {
-           provider: {
-              name: string
-           }
-           category: {
-              name: string
-           }
-        })
-      | { name: string; code: string }[]
-   > {
-      if (simple) {
-         const products = this.prisma.product.findMany({
-            where,
-            orderBy,
-            select: { name: true, code: true },
-         })
-         return products
-      }
-
+      limit?: number
+   ): Promise<(Product & { provider: { name: string }; category: { name: string } })[]> {
       const products = this.prisma.product.findMany({
          where,
          orderBy,
@@ -56,6 +36,20 @@ export class ProductsService {
             category: { select: { name: true } },
             provider: { select: { name: true } },
          },
+      })
+      return products
+   }
+
+   async findAllSimple(
+      where?: Prisma.ProductWhereInput,
+      orderBy?: Prisma.ProductOrderByWithRelationInput,
+      limit?: number
+   ): Promise<{ name: string; code: string }[]> {
+      const products = this.prisma.product.findMany({
+         where,
+         orderBy,
+         select: { name: true, code: true },
+         take: limit || 50,
       })
       return products
    }

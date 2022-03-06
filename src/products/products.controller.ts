@@ -14,6 +14,28 @@ export class ProductsController {
       return this.productService.create(newProduct)
    }
 
+   @Get("/simple")
+   async findAllSimple(
+      @Query("limit") limit?: string,
+      @Query("searchVal") searchVal?: string,
+      @Query("providerId") providerId?: string
+   ) {
+      const filtersArray: Prisma.Enumerable<Prisma.ProductWhereInput> = []
+      searchVal &&
+         filtersArray.push({
+            OR: [{ name: { contains: searchVal } }, { code: { contains: searchVal } }],
+         })
+      providerId && filtersArray.push({ providerId: { equals: +providerId } })
+
+      const products = await this.productService.findAllSimple(
+         { AND: filtersArray },
+         { code: "asc" },
+         +limit
+      )
+
+      return products
+   }
+
    @Get()
    async findAll(
       @Query("providerId") providerId?: string,
@@ -26,19 +48,13 @@ export class ProductsController {
       @Query("blankStockMax") blankStockMax?: string,
       @Query("blankStockMin") blankStockMin?: string,
       @Query("limit") limit?: string,
-      @Query("simple") simple?: boolean,
       @Query("didOrder") didOrder?: boolean,
       @Query("updatedAtFrom") updatedAtFrom?: string,
       @Query("updatedAtTo") updatedAtTo?: string,
       @Query("orderedAtFrom") orderedAtFrom?: string,
-      @Query("orderedAtTo") orderedAtTo?: string
-   ): Promise<
-      | (Product & { category: { name: string }; provider: { name: string } })
-      | {
-           name: string
-           code: string
-        }[]
-   > {
+      @Query("orderedAtTo") orderedAtTo?: string,
+      @Query("needStock") needStock?: boolean
+   ): Promise<(Product & { category: { name: string }; provider: { name: string } })[]> {
       const filtersArray: Prisma.Enumerable<Prisma.ProductWhereInput> = []
       categoryId && filtersArray.push({ categoryId: { equals: +categoryId } })
       providerId && filtersArray.push({ providerId: { equals: +providerId } })
@@ -60,12 +76,21 @@ export class ProductsController {
          filtersArray.push({
             OR: [{ name: { contains: searchVal } }, { code: { contains: searchVal } }],
          })
+
       const products = await this.productService.findAll(
          { AND: filtersArray },
          { code: "asc" },
-         +limit,
-         Boolean(simple)
+         +limit
       )
+
+      if (needStock) {
+         return products.filter(
+            product =>
+               product.blankMaxStock < product.blankMinStock ||
+               product.unregisteredStock < product.unregisteredMinStock
+         )
+      }
+
       return products
    }
 

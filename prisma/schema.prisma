@@ -68,7 +68,8 @@ model ProductInOrder {
    productId String
    order Order @relation(fields: [orderId], references: [id])
    orderId Int
-   qty Int
+   blankQty Int
+   unregisteredQty Int
 }
 
 model Config {

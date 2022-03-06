@@ -14,7 +14,8 @@ export class OrdersService {
                createMany: {
                   data: createOrderDto.products.map(product => ({
                      productId: product.code,
-                     qty: product.qty,
+                     blankQty: product.blankQty,
+                     unregisteredQty: product.unregisteredQty,
                   })),
                },
             },
@@ -48,7 +49,10 @@ export class OrdersService {
             productInOrder: {
                updateMany: updateOrderDto.products.map(product => ({
                   where: { productId: product.code },
-                  data: { qty: product.qty },
+                  data: {
+                     blankQty: product.blankQty,
+                     unregisteredQty: product.unregisteredQty,
+                  },
                })),
             },
             status: updateOrderDto.status,
