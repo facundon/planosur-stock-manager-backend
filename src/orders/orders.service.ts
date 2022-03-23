@@ -76,7 +76,10 @@ export class OrdersService {
                })
             })
          )
-
+         /*          prisma.order.update({
+            where: { id },
+            data: { productInOrder: { deleteMany: { orderId: { equals: id } } } },
+         }) */
          return prisma.order.delete({
             where: { id },
          })
