@@ -57,8 +57,6 @@ model Order {
    provider Provider @relation(fields: [providerId], references: [id])
    providerId Int
    createdAt DateTime @default(now())
-   updatedAt DateTime @updatedAt
-   status OrderStatus  @default(pending)
    file String
 }
 
@@ -86,11 +84,4 @@ enum Unit {
   kg
   lt
   ml
-}
-
-enum OrderStatus {
-   fullfiled
-   pending
-   claim
-   canceled
 }
