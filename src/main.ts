@@ -10,7 +10,7 @@ async function bootstrap() {
    const app = await NestFactory.create<NestExpressApplication>(AppModule)
    app.disable("x-powered-by")
    app.use(helmet())
-   app.enableCors({ origin: process.env.HOSTS, credentials: true })
+   app.enableCors({ origin: process.env.HOST, credentials: true })
 
    const { httpAdapter } = app.get(HttpAdapterHost)
    app.useGlobalFilters(new PrismaClientExceptionFilter(httpAdapter))

@@ -3,18 +3,21 @@ import { OrdersService } from "./orders.service"
 import { CreateOrderDto } from "./dto/create-order.dto"
 import { UpdateOrderDto } from "./dto/update-order.dto"
 import { Prisma } from "@prisma/client"
+import { generatePdf } from "src/orders/pdf"
 
 @Controller("orders")
 export class OrdersController {
    constructor(private readonly ordersService: OrdersService) {}
 
    @Post()
-   create(@Body() createOrderDto: CreateOrderDto) {
-      return this.ordersService.create(createOrderDto)
+   async create(@Body() createOrderDto: CreateOrderDto) {
+      const orderCreated = await this.ordersService.create(createOrderDto)
+      const url = generatePdf(createOrderDto, orderCreated.id)
+      return this.ordersService.addFileUrl(url, orderCreated.id)
    }
 
    @Get()
-   findAll(@Query("searchVal") searchVal?: string, @Query("status") status?: string) {
+   findAll(@Query("searchVal") searchVal?: string) {
       const filters: Prisma.Enumerable<Prisma.OrderWhereInput> = []
       searchVal &&
          filters.push({

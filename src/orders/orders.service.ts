@@ -8,6 +8,14 @@ import { UpdateOrderDto } from "./dto/update-order.dto"
 export class OrdersService {
    constructor(private prisma: PrismaService) {}
 
+   async addFileUrl(url: string, id: number) {
+      return this.prisma.order.update({
+         where: { id },
+         data: { file: url },
+         include: { provider: { select: { name: true } } },
+      })
+   }
+
    async create(createOrderDto: CreateOrderDto) {
       const orderCreated = this.prisma.$transaction(async prisma => {
          Promise.all(
@@ -29,7 +37,7 @@ export class OrdersService {
                   },
                },
                provider: { connect: { id: createOrderDto.providerId } },
-               file: "aca va la url del pdf",
+               file: "",
             },
             include: { provider: { select: { name: true } } },
          })
@@ -76,13 +84,11 @@ export class OrdersService {
                })
             })
          )
-         /*          prisma.order.update({
-            where: { id },
-            data: { productInOrder: { deleteMany: { orderId: { equals: id } } } },
-         }) */
          return prisma.order.delete({
             where: { id },
          })
+
+         //TODO: Remove file from S3
       })
 
       return updatedOrder
