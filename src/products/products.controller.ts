@@ -125,11 +125,10 @@ export class ProductsController {
             )
          })
       )
-
       const alertProducts = products.filter(
          product =>
-            product.blankMinStock < product.blankStock ||
-            product.unregisteredMinStock < product.unregisteredStock
+            product.blankMinStock > product.blankStock ||
+            product.unregisteredMinStock > product.unregisteredStock
       )
       if (alertProducts.length) {
          sendEmail(`Los siguientes productos se encuentran por debajo del stock mínimo:
