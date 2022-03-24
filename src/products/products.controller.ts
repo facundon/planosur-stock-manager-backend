@@ -3,6 +3,7 @@ import { Prisma, Product } from "@prisma/client"
 import { CreateProductDto } from "src/products/dto/create-product.dto"
 import { SaleDto, StockType } from "src/products/dto/sale.dto"
 import { UpdateProductDto } from "src/products/dto/update-product.dto"
+import { sendEmail } from "src/utils/email"
 import { ProductsService } from "./products.service"
 
 @Controller("products")
@@ -112,8 +113,8 @@ export class ProductsController {
    }
 
    @Post("/sale")
-   sale(@Body() sale: SaleDto) {
-      const products = Promise.all(
+   async sale(@Body() sale: SaleDto) {
+      const products = await Promise.all(
          sale.products.map(async ({ code, amount, type }) => {
             const stockType: keyof Product =
                type === StockType.blank ? "blankStock" : "unregisteredStock"
@@ -124,6 +125,22 @@ export class ProductsController {
             )
          })
       )
+
+      const alertProducts = products.filter(
+         product =>
+            product.blankMinStock < product.blankStock ||
+            product.unregisteredMinStock < product.unregisteredStock
+      )
+      if (alertProducts.length) {
+         sendEmail(`Los siguientes productos se encuentran por debajo del stock mínimo:
+         ${alertProducts
+            .map(
+               product => `${product.code} - ${product.name}_______ Capital: ${product.blankStock} ______ Provincia: ${product.unregisteredStock}
+         `
+            )
+            .toString()}
+         `)
+      }
 
       return products
    }
