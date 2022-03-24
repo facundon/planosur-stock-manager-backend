@@ -1,3 +1,4 @@
+import { Product } from ".prisma/client"
 import { createTransport } from "nodemailer"
 
 const checkEnvs = () => {
@@ -30,4 +31,24 @@ export const sendEmail = async (message: string) => {
       subject: "Alerta de Stock",
       html: message,
    })
+}
+
+export function getBaseMessage(
+   products: (Product & {
+      provider: {
+         name: string
+      }
+      category: {
+         name: string
+      }
+   })[]
+) {
+   return `<h4>Los siguientes productos se encuentran por debajo del stock mínimo:</h4><br />
+   <ul>${products
+      .map(
+         product =>
+            `<li>${product.code} - ${product.name}: <span style="color: cyan;">Capital</span>: <strong>${product.blankStock}</strong> ---- <span style="color: darkslateblue;">Provincia</span>: <strong>${product.unregisteredStock}</strong></li>`
+      )
+      .toString()}</ul>
+   `
 }
