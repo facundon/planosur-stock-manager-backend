@@ -47,7 +47,7 @@ export function getBaseMessage(
    <ul>${products
       .map(
          product =>
-            `<li>${product.code} - ${product.name}: <span style="color: cyan;">Capital</span>: <strong>${product.blankStock}</strong> ---- <span style="color: darkslateblue;">Provincia</span>: <strong>${product.unregisteredStock}</strong></li>`
+            `<li>${product.code} - ${product.name}: <span style="color: cyan;">Cp.</span>: <strong>${product.blankStock}</strong> ---- <span style="color: darkslateblue;">Pv.</span>: <strong>${product.unregisteredStock}</strong></li>`
       )
       .toString()}</ul>
    `
