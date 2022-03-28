@@ -13,8 +13,8 @@ export class OrdersController {
    async create(@Body() createOrderDto: CreateOrderDto) {
       const orderCreated = await this.ordersService.create(createOrderDto)
 
-      const url = generatePdf(orderCreated.productInOrder, orderCreated.id)
-      return this.ordersService.addFileUrl(url, orderCreated.id)
+      const pdf = await generatePdf(orderCreated.productInOrder, orderCreated.id)
+      return this.ordersService.addFileUrl(pdf, orderCreated.id)
    }
 
    @Get()

@@ -1,5 +1,6 @@
 import { Product } from ".prisma/client"
 import { createTransport } from "nodemailer"
+import Mail from "nodemailer/lib/mailer"
 
 const checkEnvs = () => {
    if (
@@ -12,7 +13,11 @@ const checkEnvs = () => {
       throw Error("Must define SMTP_HOST/USER/PASS/TO/FROM envs")
 }
 
-export const sendEmail = async (message: string, subject: string) => {
+export const sendEmail = async (
+   message: string,
+   subject: string,
+   attachments?: Mail.Attachment[]
+) => {
    checkEnvs()
 
    const transporter = createTransport({
@@ -30,6 +35,7 @@ export const sendEmail = async (message: string, subject: string) => {
       to: process.env.SMTP_TO,
       subject,
       html: message,
+      attachments,
    })
 }
 
