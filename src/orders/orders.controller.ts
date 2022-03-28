@@ -12,7 +12,8 @@ export class OrdersController {
    @Post()
    async create(@Body() createOrderDto: CreateOrderDto) {
       const orderCreated = await this.ordersService.create(createOrderDto)
-      const url = generatePdf(createOrderDto, orderCreated.id)
+
+      const url = generatePdf(orderCreated.productInOrder, orderCreated.id)
       return this.ordersService.addFileUrl(url, orderCreated.id)
    }
 

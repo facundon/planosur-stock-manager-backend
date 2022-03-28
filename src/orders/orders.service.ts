@@ -39,7 +39,16 @@ export class OrdersService {
                provider: { connect: { id: createOrderDto.providerId } },
                file: "",
             },
-            include: { provider: { select: { name: true } } },
+            include: {
+               provider: { select: { name: true } },
+               productInOrder: {
+                  select: {
+                     product: { select: { name: true, code: true } },
+                     blankQty: true,
+                     unregisteredQty: true,
+                  },
+               },
+            },
          })
       })
       return orderCreated

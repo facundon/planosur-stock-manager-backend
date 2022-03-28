@@ -1,8 +1,16 @@
 import { createWriteStream } from "fs"
 import PDFDocument = require("pdfkit-table")
-import { CreateOrderDto } from "src/orders/dto/create-order.dto"
 
-export function generatePdf(createOrderDto: CreateOrderDto, orderId: number): string {
+type ProductInOrder = {
+   product: {
+      name: string
+      code: string
+   }
+   blankQty: number
+   unregisteredQty: number
+}
+
+export function generatePdf(productsInOrder: ProductInOrder[], orderId: number): string {
    const doc = new PDFDocument({
       layout: "portrait",
       margin: 30,
@@ -14,10 +22,10 @@ export function generatePdf(createOrderDto: CreateOrderDto, orderId: number): st
 
    const tableArray = {
       headers: ["Producto", "Cuenta 1", "Cuenta 2"],
-      rows: createOrderDto.products.map(product => [
-         product.code,
-         product.blankQty.toString(),
-         product.unregisteredQty.toString(),
+      rows: productsInOrder.map(productInOrder => [
+         `${productInOrder.product.code} ${productInOrder.product.name}`,
+         productInOrder.blankQty.toString(),
+         productInOrder.unregisteredQty.toString(),
       ]),
    }
 
