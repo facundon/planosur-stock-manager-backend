@@ -40,7 +40,7 @@ export class OrdersService {
                file: "",
             },
             include: {
-               provider: { select: { name: true } },
+               provider: { select: { name: true, email: true } },
                productInOrder: {
                   select: {
                      product: { select: { name: true, code: true } },

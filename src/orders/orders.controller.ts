@@ -4,6 +4,7 @@ import { CreateOrderDto } from "./dto/create-order.dto"
 import { UpdateOrderDto } from "./dto/update-order.dto"
 import { Prisma } from "@prisma/client"
 import { generatePdf } from "src/orders/pdf"
+import { sendEmail } from "src/utils/email"
 
 @Controller("orders")
 export class OrdersController {
@@ -14,6 +15,14 @@ export class OrdersController {
       const orderCreated = await this.ordersService.create(createOrderDto)
 
       const pdf = await generatePdf(orderCreated.productInOrder, orderCreated.id)
+      if (orderCreated.provider.email)
+         sendEmail({
+            message: "Se adjunta pedido",
+            subject: "Pedido",
+            attachments: [{ content: pdf, filename: "Pedido.pdf", encoding: "base64" }],
+            to: orderCreated.provider.email,
+         })
+
       return this.ordersService.addFileUrl(pdf, orderCreated.id)
    }
 
