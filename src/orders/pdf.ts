@@ -25,7 +25,7 @@ export function generatePdf(productsInOrder: ProductInOrder[], orderId: number):
       const tableArray = {
          headers: ["Producto", "Cuenta 1", "Cuenta 2"],
          rows: productsInOrder.map(productInOrder => [
-            `${productInOrder.product.code} ${productInOrder.product.name}`,
+            `${productInOrder.product.code} - ${productInOrder.product.name}`,
             productInOrder.blankQty.toString(),
             productInOrder.unregisteredQty.toString(),
          ]),

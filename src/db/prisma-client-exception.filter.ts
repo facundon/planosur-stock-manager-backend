@@ -12,6 +12,7 @@ export class PrismaClientExceptionFilter extends BaseExceptionFilter {
 
       // Handle Prisma errors
       if (exception.code.startsWith("P")) {
+         console.log(exception)
          response.status(HttpStatus.CONFLICT).json({
             code: HttpStatus.CONFLICT,
             message: PRISMA_ERROR_CODES[exception.code] || exception.message.replace(/\n/gm, " "),

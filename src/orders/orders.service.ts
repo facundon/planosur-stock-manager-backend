@@ -8,14 +8,6 @@ import { UpdateOrderDto } from "./dto/update-order.dto"
 export class OrdersService {
    constructor(private prisma: PrismaService) {}
 
-   async addFileUrl(url: string, id: number) {
-      return this.prisma.order.update({
-         where: { id },
-         data: { file: url },
-         include: { provider: { select: { name: true } } },
-      })
-   }
-
    async create(createOrderDto: CreateOrderDto) {
       const orderCreated = this.prisma.$transaction(async prisma => {
          Promise.all(
@@ -37,7 +29,6 @@ export class OrdersService {
                   },
                },
                provider: { connect: { id: createOrderDto.providerId } },
-               file: "",
             },
             include: {
                provider: { select: { name: true, email: true } },

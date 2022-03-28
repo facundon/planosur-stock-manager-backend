@@ -23,7 +23,7 @@ export class OrdersController {
             to: orderCreated.provider.email,
          })
 
-      return this.ordersService.addFileUrl(pdf, orderCreated.id)
+      return orderCreated
    }
 
    @Get()
