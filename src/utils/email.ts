@@ -12,7 +12,7 @@ const checkEnvs = () => {
       throw Error("Must define SMTP_HOST/USER/PASS/TO/FROM envs")
 }
 
-export const sendEmail = async (message: string) => {
+export const sendEmail = async (message: string, subject: string) => {
    checkEnvs()
 
    const transporter = createTransport({
@@ -28,7 +28,7 @@ export const sendEmail = async (message: string) => {
    await transporter.sendMail({
       from: `"Planosur Stock" <${process.env.SMTP_FROM}>`,
       to: process.env.SMTP_TO,
-      subject: "Alerta de Stock",
+      subject,
       html: message,
    })
 }

@@ -130,7 +130,7 @@ export class ProductsController {
             product.blankMinStock > product.blankStock ||
             product.unregisteredMinStock > product.unregisteredStock
       )
-      if (alertProducts.length) sendEmail(getBaseMessage(alertProducts))
+      if (alertProducts.length) sendEmail(getBaseMessage(alertProducts), "Alerta de Stock")
 
       return products
    }
